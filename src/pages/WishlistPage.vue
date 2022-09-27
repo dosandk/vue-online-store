@@ -2,16 +2,22 @@
   <div class="page-container">
     <h1 class="page-title">WishList</h1>
 
-    <CardsList>
-      <template #default="slotProps">
-        <TheCard
-          :data="slotProps.data"
-          @updateCart="updateCart"
-          @updateWishlist="updateWishList" />
-      </template>
-    </CardsList>
+    <template v-if="products.length">
+      <CardsList :data="products" @update-cart="updateCart">
+        <template #default="slotProps">
+          <TheCard
+            :data="slotProps.data"
+            @updateCart="updateCart"
+            @updateWishlist="updateWishList" />
+        </template>
+      </CardsList>
 
-    <ThePagination />
+      <ThePagination />
+    </template>
+
+    <div v-else>
+      There is no data in the wishlist
+    </div>
   </div>
 </template>
 
@@ -26,6 +32,11 @@ export default {
     ThePagination,
     CardsList,
     TheCard
+  },
+  data() {
+    return {
+      products: this.$store.state.wishList
+    }
   },
   methods: {
     updateCart() {

@@ -1,11 +1,14 @@
 import { createApp } from 'vue'
 import {createRouter, createWebHistory} from 'vue-router';
+
 import App from './App.vue'
 
-import Error404Page from "@/pages/Error404Page";
-import MainPage from "@/pages/MainPage";
-import WishlistPage from "@/pages/WishlistPage";
-import CartPage from "@/pages/CartPage";
+import store from './store';
+
+const Error404Page = () => import("@/pages/Error404Page");
+const MainPage = () => import("@/pages/MainPage");
+const WishlistPage = () => import("@/pages/WishlistPage");
+const CartPage = () => import("@/pages/CartPage");
 
 const router = createRouter({
   history: createWebHistory(),
@@ -36,5 +39,8 @@ const router = createRouter({
 
 const app = createApp(App);
 
-app.use(router);
+app
+  .use(router)
+  .use(store);
+
 app.mount('#app')

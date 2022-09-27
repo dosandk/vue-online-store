@@ -36,6 +36,11 @@ export default {
       products: this.data,
       config: this.tableConfig
     }
+  },
+  watch: {
+    data (newValue) {
+      this.products = newValue;
+    }
   }
 }
 </script>

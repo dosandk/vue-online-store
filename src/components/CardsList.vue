@@ -5,13 +5,17 @@
 </template>
 
 <script>
-import { products } from '../fixtures/products';
-
 export default {
   name: "CardsList",
+  props: ['data'],
   data () {
     return {
-      products,
+      products: this.data,
+    }
+  },
+  watch: {
+    data (newValue) {
+      this.products = newValue;
     }
   }
 }

@@ -6,13 +6,38 @@
 <script>
 export default {
   name: "InfinityList",
-  mounted () {
-    console.error('InfinityList was successfully mounted');
-    console.error(this.$refs.loader);
+  data () {
+    return {
+      pageIndex: 0,
+      observer: null
+    }
+  },
+  mounted() {
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0
+    };
+
+    this.observer = new IntersectionObserver((entries) => {
+      const [target] = entries;
+
+      if (target.isIntersecting) {
+        this.$emit('page-changed', this.pageIndex);
+      }
+    }, options);
+
+    if (this.$refs.loader) {
+      this.observer.observe(this.$refs.loader);
+    }
+  },
+
+  unmounted() {
+    console.error('unmounted');
+  },
+  beforeUnmount() {
+    console.error('beforeUnmount');
+    this.observer.disconnect();
   }
 }
 </script>
-
-<style scoped>
-
-</style>

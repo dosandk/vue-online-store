@@ -19,8 +19,9 @@
           :tableConfig="tableConfig"/>
 
       <CardsList
-          v-if="activeComponent === 'CardsList'">
-        <template #default="slotProps">
+          v-if="activeComponent === 'CardsList'"
+          :data="products">
+        <template v-slot="slotProps">
           <TheCard
               :data="slotProps.data"
               @updateCart="updateCart"
@@ -37,7 +38,6 @@ import SortableTable from "@/components/SortableTable";
 import CardsList from "@/components/CardsList";
 
 import {tableConfig} from './sortable-table-config';
-import {products} from "@/fixtures/products";
 import InfinityList from "@/components/InfinityList";
 import TheCard from "@/components/TheCard";
 
@@ -52,12 +52,21 @@ export default {
   },
   data() {
     return {
-      activeComponent: 'SortableTable',
-      products,
+      activeComponent: 'CardsList',
+      products: [],
       tableConfig
     }
   },
   methods: {
+    async loadProducts() {
+      try {
+        const response = await fetch(`${process.env.VUE_APP_BACKEND_URL}api/rest/products?_start=0&_end=10`);
+        this.products = await response.json();
+      } catch (error) {
+        console.error(`Something went wrong: ${error.message}`);
+        throw new Error(error);
+      }
+    },
     showTableView() {
       this.activeComponent = 'SortableTable';
     },
@@ -65,11 +74,14 @@ export default {
       this.activeComponent = 'CardsList';
     },
     updateCart() {
-
+      this.$store.commit('ADD_TO_CART', this.products[0]);
     },
     updateWishList() {
-
+      this.$store.commit('ADD_TO_WISHLIST', this.products[1]);
     }
+  },
+  created() {
+    this.loadProducts();
   }
 }
 </script>

@@ -7,13 +7,12 @@
 
 <script>
 import TheCart from "@/components/TheCart";
-import {products} from "@/fixtures/products";
 
 export default {
   name: "CartPage",
-  data () {
+  data() {
     return {
-      products
+      products: this.$store.state.cart
     }
   },
   components: {

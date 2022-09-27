@@ -33,26 +33,14 @@
 </template>
 
 <script>
-import { products } from './fixtures/products'
-
 export default {
   name: 'App',
-  components: {
-  // TODO: add components if it's necessary
-  },
-  data () {
-    return {
-      products,
-      wishListProducts: [],
-      cartProducts: []
-    }
-  },
-  methods: {
-    updateCart(id) {
-      console.error('updateCart', id);
+  computed: {
+    wishListProducts () {
+      return this.$store.state.wishList;
     },
-    updateWishList(id) {
-      console.error('updateWishList', id);
+    cartProducts () {
+      return this.$store.state.cart;
     }
   }
 }

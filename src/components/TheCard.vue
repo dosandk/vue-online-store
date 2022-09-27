@@ -19,7 +19,7 @@
     <footer class="os-product-footer" v-if="showFooter">
       <button
           @click="updateWishList"
-          :class="['os-btn-default', 'add-to-wishlist-btn', { active: false }]">
+          :class="['os-btn-default', 'add-to-wishlist-btn', { active: isExistedInWishList }]">
         <i class="bi bi-heart"></i>
         <i class="bi bi-heart-fill"></i>
         Wishlist
@@ -27,7 +27,7 @@
       <div class="btns-separator"></div>
       <button
           @click="updateCart"
-          :class="['os-btn-default', 'add-to-cart-btn', { active: true }]">
+          :class="['os-btn-default', 'add-to-cart-btn', { active: isExistedInCart }]">
         <i class="bi bi-cart"></i>
         <i class="bi bi-cart-check-fill"></i>
         Cart
@@ -43,6 +43,8 @@ export default {
   data() {
     return {
       product: this.data,
+      isExistedInWishList: false,
+      isExistedInCart: false,
       showFooter: true
     }
   },
