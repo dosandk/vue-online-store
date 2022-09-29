@@ -24,6 +24,7 @@ export default {
 
       if (target.isIntersecting) {
         this.$emit('page-changed', this.pageIndex);
+        this.pageIndex += 1;
       }
     }, options);
 
@@ -31,13 +32,16 @@ export default {
       this.observer.observe(this.$refs.loader);
     }
   },
-
-  unmounted() {
-    console.error('unmounted');
-  },
-  beforeUnmount() {
-    console.error('beforeUnmount');
-    this.observer.disconnect();
-  }
+  // NOTE: commented just for example
+  // updated () {
+  //   console.error('updated');
+  // },
+  // unmounted() {
+  //   console.error('unmounted');
+  // },
+  // beforeUnmount() {
+  //   console.error('beforeUnmount');
+  //   this.observer.disconnect();
+  // }
 }
 </script>

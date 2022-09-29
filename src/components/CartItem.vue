@@ -36,6 +36,10 @@ export default {
       this.count += value;
 
       this.$emit('update-total', this.product.price * value);
+
+      if (this.count === 0) {
+        this.$emit('remove-product', this.product.id);
+      }
     }
   }
 }

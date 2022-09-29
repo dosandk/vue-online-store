@@ -19,7 +19,7 @@
     <footer class="os-product-footer" v-if="showFooter">
       <button
           @click="updateWishList"
-          :class="['os-btn-default', 'add-to-wishlist-btn', { active: isExistedInWishList }]">
+          :class="['os-btn-default', 'add-to-wishlist-btn', { active: wishListActive }]">
         <i class="bi bi-heart"></i>
         <i class="bi bi-heart-fill"></i>
         Wishlist
@@ -27,7 +27,7 @@
       <div class="btns-separator"></div>
       <button
           @click="updateCart"
-          :class="['os-btn-default', 'add-to-cart-btn', { active: isExistedInCart }]">
+          :class="['os-btn-default', 'add-to-cart-btn', { active: cartActive }]">
         <i class="bi bi-cart"></i>
         <i class="bi bi-cart-check-fill"></i>
         Cart
@@ -39,12 +39,12 @@
 <script>
 export default {
   name: "TheCard",
-  props: ['data'],
+  props: ['data', 'isExistedInWishList', 'isExistedInCart'],
   data() {
     return {
       product: this.data,
-      isExistedInWishList: false,
-      isExistedInCart: false,
+      wishListActive: this.isExistedInWishList,
+      cartActive: this.isExistedInCart,
       showFooter: true
     }
   },
@@ -54,6 +54,14 @@ export default {
     },
     updateWishList() {
       this.$emit('update-wishlist', this.product.id);
+    }
+  },
+  watch: {
+    isExistedInWishList (newValue) {
+      this.wishListActive = newValue;
+    },
+    isExistedInCart (newValue) {
+      this.cartActive = newValue;
     }
   }
 }

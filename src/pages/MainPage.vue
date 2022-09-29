@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <InfinityList>
+    <InfinityList @pageChanged="pageChanged">
       <SortableTable
           v-if="activeComponent === 'SortableTable'"
           :data="products"
@@ -24,6 +24,8 @@
         <template v-slot="slotProps">
           <TheCard
               :data="slotProps.data"
+              :isExistedInWishList="wishList.includes(slotProps.data.id)"
+              :isExistedInCart="cart.includes(slotProps.data.id)"
               @updateCart="updateCart"
               @updateWishlist="updateWishList"/>
         </template>
@@ -54,17 +56,40 @@ export default {
     return {
       activeComponent: 'CardsList',
       products: [],
-      tableConfig
+      loading: true,
+      tableConfig,
+      pageSize: 10,
+      url: new URL('api/rest/products', process.env.VUE_APP_BACKEND_URL)
     }
   },
   methods: {
-    async loadProducts() {
+    async loadProducts(pageIndex = 0) {
       try {
-        const response = await fetch(`${process.env.VUE_APP_BACKEND_URL}api/rest/products?_start=0&_end=10`);
-        this.products = await response.json();
+        this.loading = true;
+
+        this.setPagination(pageIndex);
+
+        const response = await fetch(this.url);
+        const data = await response.json();
+
+        this.products = [...this.products, ...data];
       } catch (error) {
         console.error(`Something went wrong: ${error.message}`);
         throw new Error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    setPagination (pageIndex) {
+      const start = pageIndex * this.pageSize;
+      const end = start + this.pageSize;
+
+      this.url.searchParams.set('_start', start);
+      this.url.searchParams.set('_end', end);
+    },
+    pageChanged (pageIndex) {
+      if (this.loading === false) {
+        this.loadProducts(pageIndex);
       }
     },
     showTableView() {
@@ -73,11 +98,26 @@ export default {
     showGridView() {
       this.activeComponent = 'CardsList';
     },
-    updateCart() {
-      this.$store.commit('ADD_TO_CART', this.products[0]);
+    findProduct (productId = '') {
+      return this.products.find(product => product.id === productId);
     },
-    updateWishList() {
-      this.$store.commit('ADD_TO_WISHLIST', this.products[1]);
+    updateCart(productId = '') {
+      const product = this.findProduct(productId);
+
+      this.$store.commit('ADD_TO_CART', product);
+    },
+    updateWishList(productId = '') {
+      const product = this.findProduct(productId);
+
+      this.$store.commit('ADD_TO_WISHLIST', product);
+    }
+  },
+  computed: {
+    wishList () {
+      return this.$store.state.wishList.map(item => item.id);
+    },
+    cart () {
+      return this.$store.state.cart.map(item => item.id);
     }
   },
   created() {

@@ -6,6 +6,7 @@
           :key="product.id"
           :data="product"
           @updateTotal="updateTotal"
+          @removeProduct="removeProduct"
         />
     </ul>
     <div class="footer">
@@ -43,6 +44,14 @@ export default {
   methods: {
     updateTotal (price) {
       this.totalPrice += price;
+    },
+    removeProduct (id) {
+      this.$emit('remove-product', id);
+    }
+  },
+  watch: {
+    items (newValue) {
+      this.products = newValue;
     }
   }
 }

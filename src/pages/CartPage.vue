@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <h1 class="page-title">Cart</h1>
-    <TheCart :items="products" />
+    <TheCart :items="products" @removeProduct="removeProduct"/>
   </div>
 </template>
 
@@ -10,13 +10,18 @@ import TheCart from "@/components/TheCart";
 
 export default {
   name: "CartPage",
-  data() {
-    return {
-      products: this.$store.state.cart
-    }
-  },
   components: {
     TheCart
+  },
+  methods: {
+    removeProduct(id) {
+      this.$store.commit('REMOVE_FROM_CART', id);
+    }
+  },
+  computed: {
+    products () {
+      return this.$store.state.cart;
+    }
   }
 }
 </script>
