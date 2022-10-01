@@ -7,12 +7,13 @@
         <template #default="slotProps">
           <TheCard
             :data="slotProps.data"
+            :showFooter="false"
             @updateCart="updateCart"
             @updateWishlist="updateWishList" />
         </template>
       </CardsList>
 
-      <ThePagination />
+<!--      <ThePagination />-->
     </template>
 
     <div v-else>
@@ -22,14 +23,14 @@
 </template>
 
 <script>
-import ThePagination from "@/components/ThePagination";
+// import ThePagination from "@/components/ThePagination";
 import CardsList from "@/components/CardsList";
 import TheCard from "@/components/TheCard";
 
 export default {
   name: "WishlistPage",
   components: {
-    ThePagination,
+    // ThePagination,
     CardsList,
     TheCard
   },

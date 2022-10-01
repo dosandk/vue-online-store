@@ -24,6 +24,7 @@
         <template v-slot="slotProps">
           <TheCard
               :data="slotProps.data"
+              :showFooter="true"
               :isExistedInWishList="wishList.includes(slotProps.data.id)"
               :isExistedInCart="cart.includes(slotProps.data.id)"
               @updateCart="updateCart"

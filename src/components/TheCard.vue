@@ -16,7 +16,7 @@
       <p class="os-product-description">{{ product.description.slice(0, 50) + '...' }}</p>
     </div>
 
-    <footer class="os-product-footer" v-if="showFooter">
+    <footer class="os-product-footer" v-if="footer">
       <button
           @click="updateWishList"
           :class="['os-btn-default', 'add-to-wishlist-btn', { active: wishListActive }]">
@@ -39,13 +39,13 @@
 <script>
 export default {
   name: "TheCard",
-  props: ['data', 'isExistedInWishList', 'isExistedInCart'],
+  props: ['data', 'showFooter', 'isExistedInWishList', 'isExistedInCart'],
   data() {
     return {
       product: this.data,
       wishListActive: this.isExistedInWishList,
       cartActive: this.isExistedInCart,
-      showFooter: true
+      footer: this.showFooter
     }
   },
   methods: {
