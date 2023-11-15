@@ -3,32 +3,44 @@
     <h1 class="page-title">Products</h1>
 
     <div class="filters-panel">
-      <SearchBox/>
+      <SearchBox />
       <div class="list-view-controls">
-        <i :class="['bi', 'bi-list', { active: activeComponent === 'SortableTable' }]"
-           @click="showTableView"></i>
-        <i :class="['bi', 'bi-grid', { active: activeComponent === 'CardsList' }]"
-           @click="showGridView"></i>
+        <i
+          :class="[
+            'bi',
+            'bi-list',
+            { active: activeComponent === 'SortableTable' },
+          ]"
+          @click="showTableView"
+        ></i>
+        <i
+          :class="[
+            'bi',
+            'bi-grid',
+            { active: activeComponent === 'CardsList' },
+          ]"
+          @click="showGridView"
+        ></i>
       </div>
     </div>
 
     <InfinityList @pageChanged="pageChanged">
       <SortableTable
-          v-if="activeComponent === 'SortableTable'"
-          :data="products"
-          :tableConfig="tableConfig"/>
+        v-if="activeComponent === 'SortableTable'"
+        :data="products"
+        :tableConfig="tableConfig"
+      />
 
-      <CardsList
-          v-if="activeComponent === 'CardsList'"
-          :data="products">
+      <CardsList v-if="activeComponent === 'CardsList'" :data="products">
         <template v-slot="slotProps">
           <TheCard
-              :data="slotProps.data"
-              :showFooter="true"
-              :isExistedInWishList="wishList.includes(slotProps.data.id)"
-              :isExistedInCart="cart.includes(slotProps.data.id)"
-              @updateCart="updateCart"
-              @updateWishlist="updateWishList"/>
+            :data="slotProps.data"
+            :showFooter="true"
+            :isExistedInWishList="wishList.includes(slotProps.data.id)"
+            :isExistedInCart="cart.includes(slotProps.data.id)"
+            @updateCart="updateCart"
+            @updateWishlist="updateWishList"
+          />
         </template>
       </CardsList>
     </InfinityList>
@@ -40,7 +52,7 @@ import SearchBox from "@/components/SearchBox";
 import SortableTable from "@/components/SortableTable";
 import CardsList from "@/components/CardsList";
 
-import {tableConfig} from './sortable-table-config';
+import { tableConfig } from "./sortable-table-config";
 import InfinityList from "@/components/InfinityList";
 import TheCard from "@/components/TheCard";
 
@@ -51,17 +63,17 @@ export default {
     SortableTable,
     CardsList,
     InfinityList,
-    TheCard
+    TheCard,
   },
   data() {
     return {
-      activeComponent: 'CardsList',
+      activeComponent: "CardsList",
       products: [],
       loading: true,
       tableConfig,
       pageSize: 10,
-      url: new URL('api/rest/products', process.env.VUE_APP_BACKEND_URL)
-    }
+      url: new URL("/products", process.env.VUE_APP_BACKEND_URL),
+    };
   },
   methods: {
     async loadProducts(pageIndex = 0) {
@@ -81,50 +93,50 @@ export default {
         this.loading = false;
       }
     },
-    setPagination (pageIndex) {
+    setPagination(pageIndex) {
       const start = pageIndex * this.pageSize;
       const end = start + this.pageSize;
 
-      this.url.searchParams.set('_start', start);
-      this.url.searchParams.set('_end', end);
+      this.url.searchParams.set("_start", start);
+      this.url.searchParams.set("_end", end);
     },
-    pageChanged (pageIndex) {
+    pageChanged(pageIndex) {
       if (this.loading === false) {
         this.loadProducts(pageIndex);
       }
     },
     showTableView() {
-      this.activeComponent = 'SortableTable';
+      this.activeComponent = "SortableTable";
     },
     showGridView() {
-      this.activeComponent = 'CardsList';
+      this.activeComponent = "CardsList";
     },
-    findProduct (productId = '') {
-      return this.products.find(product => product.id === productId);
+    findProduct(productId = "") {
+      return this.products.find((product) => product.id === productId);
     },
-    updateCart(productId = '') {
+    updateCart(productId = "") {
       const product = this.findProduct(productId);
 
-      this.$store.commit('ADD_TO_CART', product);
+      this.$store.commit("ADD_TO_CART", product);
     },
-    updateWishList(productId = '') {
+    updateWishList(productId = "") {
       const product = this.findProduct(productId);
 
-      this.$store.commit('ADD_TO_WISHLIST', product);
-    }
+      this.$store.commit("ADD_TO_WISHLIST", product);
+    },
   },
   computed: {
-    wishList () {
-      return this.$store.state.wishList.map(item => item.id);
+    wishList() {
+      return this.$store.state.wishList.map((item) => item.id);
     },
-    cart () {
-      return this.$store.state.cart.map(item => item.id);
-    }
+    cart() {
+      return this.$store.state.cart.map((item) => item.id);
+    },
   },
   created() {
     this.loadProducts();
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
